@@ -15,22 +15,38 @@
 
 <body id="app">
 
+    <!--
     <div v-show="name">
-        <h1 v-show="name">Bienvenido, {{ name }}!</h1>
-        <p v-show="name">Uso de v-show junto com div</p>
+        <h1>{{ gender == 'm' ? 'Bienvenido' : 'Bienvenida' }} {{ name }}!</h1>
+        <p>Uso de v-show junto com div</p>
     </div>
+    -->
 
     <hr>
 
-    <template v-if="name">
-        <h1>Hola, {{ name }}!</h1>
+    <template v-if="name && gender">
+        <h1>{{ gender === 'm' ? 'Bienvenido' : 'Bienvenida' }} {{ name }}!</h1>
         <p>Uso de v-if junto con template que se usa para   </p>
     </template>
     <p v-else>Por favor introduce tu nombre</p>
 
+    <input type="text" v-model="name" class="form-control">
+
+    <p v-if="name === ''" class="alert alert-danger">Este campo nombre es obligatorio</p>
+    <p v-if="name.length < 2" class="alert alert-danger">El nombre no es válido</p>
+
     <hr>
 
-    <input type="text" v-model="name" class="form-control">
+    <template v-if="!gender">
+        <select v-model="gender">
+            <option value=""></option>
+            <option value="m">Hombre</option>
+            <option value="f">Mujer</option>
+        </select>
+    </template>
+    <p v-else>Por favor elige tu género</p>
+
+    <p v-if="gender === ''" class="alert alert-danger">Este campo genero es obligatorio</p>
 
     <hr>
 
@@ -45,7 +61,8 @@
         new Vue({
             el: "#app",
             data: {
-                name: ""
+                name: "",
+                gender: ""
             }
         });
 
