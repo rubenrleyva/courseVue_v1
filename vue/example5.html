@@ -120,7 +120,7 @@
             <!-- <button v-bind:disabled="years_php === 0" type="button" class="btn" @click="years_php --">-</button> -->
             <!-- <button :disabled="years === 0" type="button" class="btn" @click="years --">-</button> -->
             <!-- <button type="button" class="btn" @click="years_php --">-</button> -->
-            <button type="button" class="btn" @click="sub()">-</button>
+            <button type="button" :disabled="years === 0" class="btn" @click="sub()">-</button>
 
         </p>
 
@@ -155,7 +155,9 @@
                     this.years++;
                 },
                 sub: function (){
-                    this.years--;
+                    if (this.years > 0){
+                        this.years--;
+                    }
                 },
                 getAddButtonCalculateFontSize: function (){
                     return {'font-size': 10+this.years+'px'};
