@@ -66,7 +66,8 @@
 
         <hr>
 
-        <years-exp :years="years_php" tech="PHP"></years-exp>
+        <years-exp :years.sync="years_js" tech="JS"></years-exp>
+        <years-exp :years.sync="years_php" tech="PHP"></years-exp>
 
         <hr>
 
@@ -113,13 +114,13 @@
             <button type="button"
                     :class="{ btn: true, 'btn-danger': years > 10 }"
                     :style="getAddButtonCalculateFontSize()"
-                    @click="add(tech)">+</button>
+                    @click="add()">+</button>
             <!-- class="btn {{ years_php > 9 ? 'btn-danger' : '' }}" -->
             <!-- <button v-if="years_php !== 0" type="button" class="btn" @click="years_php --">-</button> -->
             <!-- <button v-bind:disabled="years_php === 0" type="button" class="btn" @click="years_php --">-</button> -->
-            <button :disabled="years === 0" type="button" class="btn" @click="years --">-</button>
+            <!-- <button :disabled="years === 0" type="button" class="btn" @click="years --">-</button> -->
             <!-- <button type="button" class="btn" @click="years_php --">-</button> -->
-            <!-- <button type="button" class="btn" @click="subYear()">-</button> -->
+            <button type="button" class="btn" @click="sub()">-</button>
 
         </p>
 
@@ -134,36 +135,32 @@
         Vue.component('welcome-message', {
             template: '#welcome_template',
             props: {
-                gender: {type: String, required: false, default: 'm'},
-                name: {type: String, required: false}
+                gender: {
+                    type: String,
+                    required: false,
+                    default: 'm'
+                },
+                name: {
+                    type: String,
+                    required: false
+                }
             }
         });
 
         Vue.component('years-exp', {
             template: '#years_template',
+            props: ['years', 'tech', 'years_php', 'years_js'],
             methods: {
-                add: function (tech){
-                    if (tech === 'JS'){
-                        this.years_js++;
-                    }else{
-                        this.years_php++;
-                    }
+                add: function (){
+                    this.years++;
                 },
-                sub: function (tech){
-                    if (this.years_js > 0 ){
-                        if (tech === 'JS'){
-                            this.years_js++;
-                        }
-                    }
-
-                    if (this.years_php > 0 ){
-                        if (tech === 'PHP'){
-                            this.years_php++;
-                        }
-                    }
+                sub: function (){
+                    this.years--;
                 },
+                getAddButtonCalculateFontSize: function (){
+                    return {'font-size': 10+this.years+'px'};
+                }
             },
-            props: ['years', 'tech', 'years_php', 'years_js']
         });
 
         new Vue({
@@ -175,7 +172,7 @@
                 gender: "",
                 nameBackwards: "",
                 years_php: 0,
-                years_js: 0
+                years_js: 0,
             },
             methods: {
 
@@ -194,9 +191,11 @@
                 nameBackward: function(){
                     this.nameBackwards = this.nameBackwards.split("").reverse().join("");
                 },
+                /*
                 getAddButtonCalculateFontSize: function (){
                     return {'font-size': 10+this.years+'px'};
                 }
+                 */
             }
         });
 
