@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-Ua-Compatible" content="IE-edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>RubenRL | Curso de VueJs_v1 | Example 6</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <script src="../js/vue.js"></script>
+
+</head>
+
+<body>
+
+    <h1>Hola, mundo!</h1>
+
+    <ul v-for="note in notes">
+        <li :class="{ 'text-success': note.check === true }">{{ $index + 1 }} : {{ note.note }} por {{ note.author }} - <input type="checkbox" @click="checked($index)"></li>
+    </ul>
+
+    <hr>
+
+    <form @submit.prevent="createNote" class="form">
+        <textarea v-model="new_note.note" class="form-control"></textarea>
+        <br>
+        <input v-model="new_note.author" class="form-control">
+        <br>
+        <button type="submit" class="btn btn-info">Agregar nota</button>
+    </form>
+
+<script>
+    new Vue({
+        el: 'body',
+        data: {
+            notes: [
+                {
+                    note: 'v-for es la directiva que utilizamos para iterar una lista',
+                    author: 'RubenRL',
+                    check: false
+                },
+                {
+                    note: '@click se utiliza como un alias de v-on:click',
+                    author: 'RubenRL',
+                    check: false
+                },
+                {
+                    note: 'Con Vue se pueden crear componentes propios',
+                    author: 'RubenRL',
+                    check: false
+                },
+
+                /*
+                'v-for es la directiva que utilizamos para iterar una lista',
+                '@click se utiliza como un alias de v-on:click',
+                'Con Vue se pueden crear componentes propios',
+                 */
+            ],
+            new_note: {
+                note: '',
+                author: '',
+                check: false
+            }
+        },
+        methods: {
+            createNote:  function() {
+                this.notes.push(this.new_note);
+                this.new_note = {
+                    note: '',
+                    author: '',
+                    check: false
+                }
+            },
+            checked: function (index) {
+                if (this.notes[index]['check'] === false){
+                    this.notes[index]['check'] = true;
+                }else{
+                    this.notes[index]['check'] = false;
+                }
+            }
+        }
+    });
+</script>
+
+<script src="../js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script src="../js/jquery.min.js"></script>
+
+</body>
+</html>
