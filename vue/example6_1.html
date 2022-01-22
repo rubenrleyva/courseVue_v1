@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-Ua-Compatible" content="IE-edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>RubenRL | Curso de VueJs_v1 | Example 6_1</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <script src="../js/vue.js"></script>
+
+</head>
+
+<body id="app">
+
+    <template v-if="name && gender">
+        <welcome-message v-bind:name="name" v-bind:gender="gender"></welcome-message>
+        <p>Tu nombre al revés es: {{ nameBackwards }}</p>
+
+        <hr>
+
+    </template>
+
+    <form @submit.prevent="signUp()">
+    <!-- <form @submit="signUp(true, $event)"> -->
+
+        <p v-if="name === ''">Por favor introduce tu nombre:</p>
+
+        <label>
+            <input type="text" v-model="name" class="form-control">
+        </label>
+
+        <p v-if="name === ''" class="alert alert-danger">El campo nombre es obligatorio</p>
+
+        <hr>
+
+        <p v-if="email === ''">Por favor introduce tu email:</p>
+
+        <label>
+            <input type="text" v-model="email" class="form-control">
+        </label>
+
+        <p v-if="email === ''" class="alert alert-danger">El campo email es obligatorio</p>
+
+        <hr>
+
+        <p>Por favor elige tu género:</p>
+        <label>
+            Hombre: <input type="radio" v-model="gender" value="m">
+
+            Mujer: <input type="radio" v-model="gender" value="f">
+        </label>
+
+        <hr>
+
+        <template v-for="tech in techs">
+            <years-exp :years.sync="tech.years" :tech="tech.name"></years-exp>
+        </template>
+
+        <hr>
+
+        <p v-if="gender === ''" class="alert alert-danger">Este campo genero es obligatorio</p>
+
+        <p v-show="name && gender && email">
+            <button type="submit" class="btn btn-primary">Registrate</button>
+            <button type="submit" class="btn btn-primary" @click.prevent="signUp(true)">Registrate y sal del sistema</button>
+        </p>
+
+    </form>
+
+    <form @submit.prevent="createTechs()" class="form">
+        <textarea v-model="new_techs.name" class="form-control"></textarea>
+        <button type="submit" class="btn btn-info">Agregar tecnología</button>
+    </form>
+
+    <hr>
+
+    <pre>{{ $data | json }}</pre>
+
+    <script src="../js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    <script src="../js/jquery.min.js"></script>
+
+    <script type="text/template" id="welcome_template">
+        <h1>{{ gender === 'm' ? 'Bienvenido' : 'Bienvenida' }} {{ name }}, registrate o registrate y sal del sistema!</h1>
+    </script>
+
+    <script type="text/template" id="years_template">
+
+        <p>¿Cuántos años de experiencia tienes con {{ tech }}?</p>
+
+        <p>
+
+            Respuesta: {{ years }}
+
+            <button type="button"
+                    :class="{ btn: true, 'btn-danger': years > 10 }"
+                    :style="getAddButtonCalculateFontSize()"
+                    @click="add()">+</button>
+            <button type="button" :disabled="years === 0" class="btn" @click="sub()">-</button>
+
+        </p>
+
+    </script>
+
+    <script type="text/javascript">
+
+        Vue.component('welcome-message', {
+            template: '#welcome_template',
+            props: {
+                gender: {
+                    type: String,
+                    required: false,
+                    default: 'm'
+                },
+                name: {
+                    type: String,
+                    required: false
+                }
+            }
+        });
+
+        Vue.component('years-exp', {
+            template: '#years_template',
+            props: ['years', 'tech', 'years_php', 'years_js', 'name'],
+            methods: {
+                add: function (){
+                    this.years++;
+                },
+                sub: function (){
+                    if (this.years > 0){
+                        this.years--;
+                    }
+                },
+                getAddButtonCalculateFontSize: function (){
+                    return {'font-size': 10+this.years+'px'};
+                },
+            },
+        });
+
+        new Vue({
+
+            el: "#app",
+            data: {
+                name: "",
+                email: "",
+                gender: "",
+                nameBackwards: "",
+                years_php: 0,
+                years_js: 0,
+                techs: [
+                    {name: 'PHP', years: 0},
+                    {name: 'JS', years: 0},
+                    {name: 'HTML', years: 0},
+                ],
+                new_techs: {
+                    name: '',
+                    years: 0
+                }
+            },
+            methods: {
+
+                signUp: function (logout){
+                    //event.preventDefault();
+                    alert('Te acabas de registrar ' + this.name);
+
+                    if (logout){
+                        alert("Saliendo del sistema...");
+                    }
+
+                    this.nameBackwards = this.name;
+
+                    this.nameBackward();
+                },
+                nameBackward: function(){
+                    this.nameBackwards = this.nameBackwards.split("").reverse().join("");
+                },
+                createTechs:  function() {
+                    this.techs.push(this.new_techs);
+                    this.new_techs = {
+                        name: '',
+                        years: 0
+                    }
+                }
+            }
+        });
+
+    </script>
+
+</body>
+</html>
