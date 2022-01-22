@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-Ua-Compatible" content="IE-edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>RubenRL | Curso de VueJs_v1 | Example 7</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <script src="http://v1.vuejs.org/js/vue.js"></script>
+
+</head>
+
+<body id="app">
+
+    <template v-if="name && gender">
+        <h1>{{ welcome_message }} {{ name }}!</h1>
+        <p>Tu nombre al revés es: {{ nameBackwards }}</p>
+    </template>
+
+    <hr>
+
+    <form @submit.prevent="signUp()">
+
+        <p v-if="first_name === '' || last_name === ''">Por favor introduce tu nombre y apellidos</p>
+
+        <label>
+            Nombre: <input type="text" v-model="first_name" class="form-control">
+        </label>
+
+        <label>
+            Apellidos: <input type="text" v-model="last_name" class="form-control">
+        </label>
+
+        <p v-if="first_name === '' || last_name === ''" class="alert alert-danger">El campo nombre y los apellidos son obligatorios</p>
+
+        <hr>
+
+        <p v-if="email === ''">Por favor introduce tu email</p>
+
+        <label>
+            <input type="text" v-model="email" class="form-control">
+        </label>
+
+        <p v-if="email === ''" class="alert alert-danger">El campo email es obligatorio</p>
+
+        <hr>
+
+        <p>Por favor elige tu género</p>
+        <label>
+            Hombre: <input type="radio" v-model="gender" value="m">
+
+            Mujer: <input type="radio" v-model="gender" value="f">
+        </label>
+
+        <hr>
+
+        <label>
+            ¿Hablas español? <input v-model="spanish" type="checkbox">
+        </label>
+
+        <hr>
+
+        <p>¿Cuántos años de experiencia tienes con PHP?</p>
+
+        <p>
+
+            Respuesta: {{ years_php }}
+
+            <button type="button"
+                    :class="{ btn: true, 'btn-danger': years_php > 10 }"
+                    :style="getAddButtonCalculateFontSize()"
+                    @click="addYear('years_php')">+</button>
+            <button :disabled="years_php === 0" type="button" class="btn" @click="years_php --">-</button>
+
+        </p>
+
+        <hr>
+
+        <p>¿Cuántos años de experiencia tienes con JS?</p>
+
+        <p>
+
+            Respuesta: {{ years_js }}
+
+            <button type="button"
+                    :class="{ btn: true, 'btn-danger': years_js > 10 }"
+                    :style="getAddButtonCalculateFontSize()"
+                    @click="addYear('years_js')">+</button>
+            <button :disabled="years_js === 0" type="button" class="btn" @click="years_js --">-</button>
+
+        </p>
+
+        <img src="../img/logo.jpg" :title="years_php" alt="logo">
+
+        <p v-if="gender === ''" class="alert alert-danger">Este campo genero es obligatorio</p>
+
+        <p v-show="name && gender && email">
+            <button type="submit" class="btn btn-primary">Registrate</button>
+            <button type="submit" class="btn btn-primary" @click.prevent="signUp(true)">Registrate y sal del sistema</button>
+        </p>
+
+    </form>
+
+    <hr>
+
+    <pre>{{ $data | json }}</pre>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+    <script type="text/javascript">
+
+        new Vue({
+
+            el: "#app",
+            data: {
+                first_name: "",
+                last_name: "",
+                email: "",
+                gender: "",
+                nameBackwards: "",
+                spanish: true,
+                years_php: 0,
+                years_js: 0
+            },
+            computed: {
+                welcome_message: function () {
+                    if (this.spanish){
+                        return this.gender === 'm' ? 'Bienvenido' : 'Bienvenida';
+                    }
+                    return 'Welcome';
+                },
+                name: function () {
+                    if (this.first_name || this.last_name){
+                        return this.first_name+ ' ' +this.last_name;
+                    }
+                    return '';
+                }
+            },
+            watch: {
+                first_name: function (first_name) {
+                    console.log(first_name);
+                }
+            },
+            methods: {
+
+                signUp: function (logout){
+                    alert('Te acabas de registrar ' + this.first_name);
+
+                    if (logout){
+                        alert("Saliendo del sistema...");
+                    }
+
+                    this.nameBackwards = this.first_name;
+
+                    this.nameBackward();
+                },
+                nameBackward: function(){
+                    this.nameBackwards = this.nameBackwards.split("").reverse().join("");
+                },
+                addYear: function (years){
+                    if (years === 'years_js'){
+                        this.years_js++;
+                    }else{
+                        this.years_php++;
+                    }
+                },
+                subYear: function (years){
+                    if (this.years_js > 0 ){
+                        if (years === 'years_js'){
+                            this.years_js++;
+                        }
+                    }
+
+                    if (this.years_php > 0 ){
+                        if (years === 'years_php'){
+                            this.years_php++;
+                        }
+                    }
+                },
+                getAddButtonCalculateFontSize: function (){
+                    return {'font-size': 10+this.years+'px'};
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>
