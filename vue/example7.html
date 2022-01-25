@@ -15,102 +15,107 @@
 
 <body id="app">
 
-    <template v-if="name && gender">
-        <h1>{{ welcome_message }} {{ name }}!</h1>
-        <p>Tu nombre al revés es: {{ name_backward }}</p>
-    </template>
+    <div class="row">
 
-    <hr>
+        <div class="col-md-6 col-md-offset-3">
 
-    <form @submit.prevent="signUp()">
+            <template v-if="name && gender">
+                <h1>{{ welcome_message }} {{ name }}!</h1>
 
-        <p v-if="first_name === '' || last_name === ''">Por favor introduce tu nombre y apellidos</p>
+                <p>Espero que disfrutes de tu visita</p>
+                <p>Tu nombre al revés es: {{ name_backward }}</p>
+            </template>
+            <p v-if="first_name === '' || last_name === ''">Por favor introduce tu nombre y apellidos:</p>
 
-        <label>
-            Nombre: <input type="text" v-model="first_name" class="form-control">
-        </label>
+            <form @submit.prevent="signUp(false, $event)">
 
-        <label>
-            Apellidos: <input type="text" v-model="last_name" class="form-control">
-        </label>
+                <label>Nombre:</label>
+                <input type="text" v-model="first_name" class="form-control">
 
-        <p v-if="first_name === '' || last_name === ''" class="alert alert-danger">El campo nombre y los apellidos son obligatorios</p>
+                <label>Apellidos:</label>
+                <input type="text" v-model="last_name" class="form-control">
 
-        <hr>
+                <p v-if="first_name === '' || last_name === ''" class="alert alert-danger">El campo nombre y los apellidos son obligatorios</p>
 
-        <p v-if="email === ''">Por favor introduce tu email</p>
+                <hr>
 
-        <label>
-            <input type="text" v-model="email" class="form-control">
-        </label>
+                <p v-if="email === ''">Por favor introduce tu email</p>
 
-        <p v-if="email === ''" class="alert alert-danger">El campo email es obligatorio</p>
+                <label>
+                    <input type="text" v-model="email" class="form-control">
+                </label>
 
-        <hr>
+                <p v-if="email === ''" class="alert alert-danger">El campo email es obligatorio</p>
 
-        <p>Por favor elige tu género</p>
-        <label>
-            Hombre: <input type="radio" v-model="gender" value="m">
+                <hr>
 
-            Mujer: <input type="radio" v-model="gender" value="f">
-        </label>
+                <p>Por favor elige tu género</p>
+                <label>
+                    Hombre: <input type="radio" v-model="gender" value="m">
 
-        <hr>
+                    Mujer: <input type="radio" v-model="gender" value="f">
+                </label>
 
-        <label>
-            ¿Hablas español? <input v-model="spanish" type="checkbox">
-        </label>
+                <hr>
 
-        <hr>
+                <label>
+                    ¿Hablas español? <input v-model="spanish" type="checkbox">
+                </label>
 
-        <p>¿Cuántos años de experiencia tienes con PHP?</p>
+                <hr>
 
-        <p>
+                <p>¿Cuántos años de experiencia tienes con PHP?</p>
 
-            Respuesta: {{ years_php }}
+                <p>
 
-            <button type="button"
-                    :class="{ btn: true, 'btn-danger': years_php > 10 }"
-                    :style="getAddButtonCalculateFontSize()"
-                    @click="addYear('years_php')">+</button>
-            <button :disabled="years_php === 0" type="button" class="btn" @click="years_php --">-</button>
+                    Respuesta: {{ years_php }}
 
-            {{ experience_years_php }}
+                    <button type="button"
+                            :class="{ btn: true, 'btn-danger': years_php > 10 }"
+                            :style="getAddButtonCalculateFontSize()"
+                            @click="addYear('years_php')">+</button>
+                    <button :disabled="years_php === 0" type="button" class="btn" @click="years_php --">-</button>
 
-        </p>
+                    {{ experience_years_php }}
 
-        <hr>
+                </p>
 
-        <p>¿Cuántos años de experiencia tienes con JS?</p>
+                <hr>
 
-        <p>
+                <p>¿Cuántos años de experiencia tienes con JS?</p>
 
-            Respuesta: {{ years_js }}
+                <p>
 
-            <button type="button"
-                    :class="{ btn: true, 'btn-danger': years_js > 10 }"
-                    :style="getAddButtonCalculateFontSize()"
-                    @click="addYear('years_js')">+</button>
-            <button :disabled="years_js === 0" type="button" class="btn" @click="years_js --">-</button>
+                    Respuesta: {{ years_js }}
 
-            {{ experience_years_js }}
+                    <button type="button"
+                            :class="{ btn: true, 'btn-danger': years_js > 10 }"
+                            :style="getAddButtonCalculateFontSize()"
+                            @click="addYear('years_js')">+</button>
+                    <button :disabled="years_js === 0" type="button" class="btn" @click="years_js --">-</button>
 
-        </p>
+                    {{ experience_years_js }}
 
-        <img src="../img/logo.jpg" :title="years_php" alt="logo">
+                </p>
 
-        <p v-if="gender === ''" class="alert alert-danger">Este campo genero es obligatorio</p>
+                <img src="../img/logo.jpg" :title="years_php" alt="logo">
 
-        <p v-show="name && gender && email">
-            <button type="submit" class="btn btn-primary">Registrate</button>
-            <button type="submit" class="btn btn-primary" @click.prevent="signUp(true)">Registrate y sal del sistema</button>
-        </p>
+                <p v-if="gender === ''" class="alert alert-danger">Este campo genero es obligatorio</p>
 
-    </form>
+                <p v-show="name && gender && email">
+                    <button type="submit" class="btn btn-primary">Registrate</button>
+                    <button type="submit" class="btn btn-primary" @click.prevent="signUp(true)">Registrate y sal del sistema</button>
+                </p>
 
-    <hr>
+            </form>
 
-    <pre>{{ $data | json }}</pre>
+            <hr>
+
+            <pre>{{ $data | json }}</pre>
+
+        </div>
+
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
