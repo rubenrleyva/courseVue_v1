@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-Ua-Compatible" content="IE-edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>RubenRL | Curso de VueJs_v1 | Example 6_1</title>
+    <title>RubenRL | Curso de VueJs_v1 | Example 8</title>
 
     <link href="../css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
@@ -24,13 +24,14 @@
                 </h1>
 
                 <p>Espero que disfrutes tu visita</p>
-                <p>Tu nombre al revés es:
+                <p>Tu nombre al revés es: {{ name | reverse }}
             </template>
             <p v-else>Por favor escribe tu nombre:</p>
 
             <form @submit="signUp(false, $event)">
                 <label>Primer nombre:</label>
                 <input type="text" v-model="first_name" class="form-control">
+                <br>
                 <label>Apellido: </label>
                 <input type="text" v-model="last_name" class="form-control">
 
@@ -52,7 +53,7 @@
                 </label>
 
                 <template v-for="tech in techs">
-                    <years-exp :years.sync="tech.years" :tech="tech.name"></years-exp>
+                    <years-exp :years.sync="tech.years" :tech="tech"></years-exp>
                 </template>
 
                 <hr>
@@ -66,6 +67,7 @@
                         Regístrate y sal del sistema
                     </button>
                 </p>
+
             </form>
 
             <h3>Tienes experiencia en:</h3>
@@ -74,6 +76,22 @@
                 <li>{{ tech.name }}</li>
             </ul>
 
+            <br>
+
+            <template v-if="techsBackend">
+                <h3>Tienes experiencia con Backend:</h3>
+                <ul v-for="techB in techsBackend">
+                    <li>{{ techB.name }}</li>
+                </ul>
+            </template>
+
+            <template v-if="techsFrontend">
+                <h3>Tienes experiencia con Frontend:</h3>
+                <ul v-for="techF in techsFrontend">
+                    <li>{{ techF.name }}</li>
+                </ul>
+            </template>
+
             <hr>
 
             <pre>{{ $data | json }}</pre>
@@ -81,27 +99,24 @@
     </div>
 
     <script type="text/template" id="years_template">
-        <p>¿Cuántos años de experiencia tienes con {{ tech }}?</p>
+        <p>¿Cuántos años de experiencia tienes con {{ tech.name }}? ({{ tech.typ }})</p>
 
         <p>
             Respuesta: <strong>{{ years }}</strong>
 
             <button type="button"
                     class="btn"
-                    @click="add">+</button>
+                    @click="add(tech)">+</button>
 
             <button type="button"
                     :disabled="years == 0"
                     class="btn"
-                    @click="sub">-</button>
+                    @click="sub(tech)">-</button>
         </p>
     </script>
 
     <script type="text/javascript">
 
-        /*
-
-         */
         Vue.filter('ucwords', function (value) {
             return value.split(' ').map(function (word) {
                 return word.charAt(0).toUpperCase() + word.slice(1);
@@ -114,13 +129,28 @@
             });
         });
 
+        Vue.filter('reverse', function (name) {
+            return this.name.split("").reverse().join("");
+        });
+
         Vue.component('years-exp', {
             template: '#years_template',
             methods: {
                 add: function () {
                     this.years++;
+                    alert(Object.values(this.$props));
+                    this.new_tech = {
+                        name: this.tech.name, years: this.tech.years, typ: this.tech.typ
+                    }
+                    if (this.tech.typ == 'backend') {
+                        alert(this.new_tech);
+                        techsBackend.push(this.new_tech);
+                    }else{
+                        techsFrontend.push(this.new_tech);
+                    }
+
                 },
-                sub: function () {
+                sub: function (tech) {
                     this.years--;
                 },
             },
@@ -135,12 +165,15 @@
                 gender: 'm',
                 spanish: true,
                 techs: [
-                    {name: 'PHP', years: 0},
-                    {name: 'JS', years: 0},
-                    {name: 'HTML', years: 0},
-                    {name: 'CSS', years: 0},
-                    {name: 'MySQL', years: 0},
-                ]
+                    {name: 'PHP', years: 0, typ: 'backend'},
+                    {name: 'JS', years: 0, typ: 'frontend'},
+                    {name: 'HTML', years: 0, typ: 'frontend'},
+                    {name: 'CSS', years: 0, typ: 'frontend'},
+                    {name: 'MySQL', years: 0, typ: 'backend'},
+                ],
+                techsFrontend: [],
+                techsBackend: [],
+                new_tech: {name: '', years: 0, typ: ''}
             },
             computed: {
                 welcome_message: function () {
@@ -171,6 +204,7 @@
                 },
             }
         });
+
     </script>
 
     <script src="../js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
